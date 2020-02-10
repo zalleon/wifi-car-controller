@@ -8,6 +8,8 @@ char auth[] = "";
 char ssid[] = "";
 char pass[] = "";
 
+#define LIGHT D2
+
 // Forward and backward movement motor
 #define ENA D3      //ENA
 #define MOTORA_1 D4 //IN1
@@ -27,6 +29,8 @@ int minInact = 30;
 void setup()
 {
   // Pin setup
+  pinMode(LIGHT, OUTPUT);
+  
   pinMode(ENA, OUTPUT);
   pinMode(MOTORA_1, OUTPUT);
   pinMode(MOTORA_2, OUTPUT);
@@ -42,6 +46,20 @@ void setup()
   
   // Connect to blink
   Blynk.begin(auth, ssid, pass);
+}
+
+// Light controll
+BLYNK_WRITE(V2) {
+  int btn = param.asInt();
+
+  Serial.print(btn);
+  if (btn > 0) {
+    digitalWrite(LIGHT, HIGH);
+    Serial.println("Light ON");
+  } else {
+    digitalWrite(LIGHT, LOW);
+    Serial.println("Light OFF");
+  }
 }
 
 // Read Joiystick data. Pin: V1 and Merge mode
